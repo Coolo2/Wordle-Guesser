@@ -2,7 +2,7 @@
 
 A Python backended website to guess any wordle game
 
-![Demonstration](https://raw.githubusercontent.com/Coolo2/Wordle-Guesser/main/assets/demo.png)
+![Demonstration](https://raw.githubusercontent.com/Coolo22/Wordle-Guesser/main/assets/demo.png)
 
 [Demonstration](https://wordlebot.coolo2.repl.co)
 
