@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/css/index.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <title>Wordle bot v1.1.0</title>
+        <meta name="google-site-verification" content="Xgy-SbhlrmAtGtbBsyHp0OWAyQIpvjW3-wC5MJwyofE" />
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Wordle Bot v1.1.0" />
+        <meta property="og:description" content="Complete and copy any wordle puzzle you give it!" />
+        <meta property="og:url" content="https://wordlebot.coolo2.repl.co/" />
+        <meta property="og:image" content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2Pr3Xw4o3i-2ulgHAP_chKXh5UzTDODqC5g&usqp=CAU" />
+        <meta name="viewport" content="user-scalable=0">
+    </head>
+    <body>
+        <div id="header" class="header horizontal-center">
+            Wordle bot v1.1.0
+        </div>
+        <div class="grid-container vertical-center" id="grid"></div>
+        <div class="bg" id="bg"></div>
+        
+        <div class="loader" id="loader"></div>
+        <div class="message vertical-center" id="box">
+            <div class="reload-button" onclick="end()"><i class="fas fa-redo reload-button-text"></i></div>
+            
+            <div class="reload-button" id="stats-button" onclick="toggleStats()"><i class="fas fa-chart-bar reload-button-text" style="transform: scaleX(-1) rotate(270deg);"></i></div>
+            <div class="stats" id="stats-box">
+                <div class="stats-close" onclick="toggleStats()"><i class="fa-solid fa-x stats-close-icon"></i></div>
+                <div class="title">Statistics</div>
+                <br>
+                <div class="stats-outer" id="stats-outer">Hi</div>
+                <div class="title" style="font-size:25px">Global</div>
+                <ul style="font-size:20px;color:white">
+                    <li>Games played recently: <span id="stats-global-games" class="bold"></span></li>
+                    <li>Letters processed recently: <span class="smallLink bold" id="stats-global-letters"></span></li>
+                </ul>  
+                <br>
+                <div class="title" style="font-size:25px">Local</div>
+                <ul style="font-size:20px;color:white">
+                    <li>Total possible words: <span id="stats-local-words" class="bold"></span></li>
+                    <li>Letters entered: <span id="stats-local-letters" class="bold"></span></li>
+                </ul> 
+            </div>
+            <div class="message-text" id="message"></div>
+        </div>
+        <div id="help-mobile" style="opacity:0" class="bottomLeft">
+            <div style="color:white;font-size:20px;">How to use (Mobile)</div>
+            <ul style="font-size:15px;color:white">
+                <li>Tap on the box to type the letters. Copy them from your wordle game.</li>
+                <li>Hold on the box to change the color</li>
+                <li>Use one of the answers provided on the right on the next row</li>
+                <li>Continue until the answer is correct, then click the tick to reset</li>
+            </ul>  
+        </div>
+        <div id="help-desktop" style="opacity:0" class="bottomLeft">
+            <div style="color:white;font-size:20px;">How to use (PC)</div>
+            <ul style="font-size:15px;color:white;">
+                <li>Click on the box to type the letters. Copy them from your wordle game.</li>
+                <li>Right click, or use <kbd>Ctrl</kbd>, <kbd>Option</kbd>, <kbd>Alt</kbd> or <kbd>Space</kbd> to update color</li>
+                <li>Use one of the answers provided on the right on the next row</li>
+                <li>Continue until the answer is correct, then click the tick to reset</li>
+            </ul>  
+        </div>
+    </body>
+    <script src="/static/js/functions.js"></script>
+    <script src="/static/js/index.js"></script>
+</html>
