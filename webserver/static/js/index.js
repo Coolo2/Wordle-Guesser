@@ -15,6 +15,7 @@ colors = [
 ]
 
 let timer;
+let reloadTimer;
 
 async function doTimer() {
     clearTimeout(timer);
@@ -23,6 +24,7 @@ async function doTimer() {
         await postWords(row=row)
     }, 1000);
 }
+
 
 function enableRow(row=0) {
     arr = Array(5 * 6).splice(0, (row+1)*5)
@@ -100,136 +102,120 @@ async function buttonOnClick(e) {
     document.getElementById(`${(row*5)+5}-input`).focus()
 }
 
-for (i of Array(5 * 6).keys()) {
+function init() {
+    for (i of Array(5 * 6).keys()) {
+        // Grid item
+        gridItem = document.createElement("div")
+        gridItem.id = i
     
-    // Grid item
-    gridItem = document.createElement("div")
-    gridItem.id = i
+        inputField = document.createElement("input")
+        inputField.classList = "grid-item-input"
+        inputField.id = `${i}-input`
+        inputField.maxLength = 1
     
-
-    inputField = document.createElement("input")
-    inputField.classList = "grid-item-input"
-    inputField.id = `${i}-input`
-    inputField.maxLength = 1
-
-    row = Math.floor(i/5)
-
-    
-
-    gridItem.addEventListener("touchstart", function(e) {mouseDown(e)});
-    document.body.addEventListener("touchend", function(e) {mouseUp(e)});
-
-    
-
-    inputField.onfocus = async function(e) {
-        id = parseInt(e.target.id.replace("-input", ""))
-        row = Math.floor(id/5)
-
-        for (i of Array(5).keys()) {
-            document.getElementById(`row-${i}-button`).style.opacity = "0%"
-            document.getElementById(`row-${i}-button`).onclick = null
-            document.getElementById(`row-${i}-button`).style.cursor = "default"
-        }
-
-        rowButton = document.getElementById(`row-${row}-button`)
-        rowButton.onclick = buttonOnClick
-        rowButton.style.cursor = "pointer"
-        rowButton.style.opacity = "100%"
-    }
-
-    gridItem.onkeydown = async function(e) {
-        if (e.key == "Control" || e.key == " " || e.key == "Option" || e.key == "Alt") {
-            e.preventDefault();
-        }
-    }
-
-    gridItem.onkeyup = async function(e) {
-        doTimer()
-        id = parseInt(e.target.id.replace("-input", ""))
-        elem = document.getElementById(id)
-        input = document.getElementById(`${i}-input`)
-
-        row = Math.floor(id/5)
-        rowCounter = 0
-        for (i of Array(5 * 6).keys()) {
-            if (input.value != "") rowCounter += 1;
-        } 
-        
-        enableRow(row=row+1)
-
-        if (e.key == "Backspace") {
-            document.getElementById(`${id-1}-input`).focus()
-        } else if (e.key == "ArrowLeft") {
-            document.getElementById(`${id-1}-input`).focus()
-        } else if (e.key == "ArrowRight") {
-            document.getElementById(`${id+1}-input`).focus()
-        }
-        else if (e.key == "Control" || e.key == " " || e.key == "Option" || e.key == "Alt") {
-            onContextMenu(e)
-        } else if (letters.includes(e.key.toLowerCase())) {
-            addLocal("letters", 1)
-            document.getElementById(`${id+1}-input`).focus()
-        } else {
-            return
-        }
-
-        
-    }
-
-    
-
-    if (row > 0) {
-        // Under top row 
-        inputField.disabled = true
-        gridItem.classList = "grid-item disabled"
-    } else {
-        // Top row
-        gridItem.style.backgroundColor = colors[0]
-        gridItem.classList = "grid-item"
-
-        gridItem.oncontextmenu = onContextMenu
-
-        
-            
-
-        
-
-        
-    }
-    
-    
-    
-    gridItem.appendChild(inputField)
-    grid.appendChild(gridItem)
-
-    document.getElementById(`${i}-input`).onclick = function () {
-        console.log(e.button)
-    }
-
-    if ((i-4) % 5 == 0) {
         row = Math.floor(i/5)
+    
+        gridItem.addEventListener("touchstart", function(e) {mouseDown(e)});
+        document.body.addEventListener("touchend", function(e) {mouseUp(e)});
+    
+        inputField.onfocus = async function(e) {
+            id = parseInt(e.target.id.replace("-input", ""))
+            row = Math.floor(id/5)
+    
+            for (i of Array(5).keys()) {
+                document.getElementById(`row-${i}-button`).style.opacity = "0%"
+                document.getElementById(`row-${i}-button`).onclick = null
+                document.getElementById(`row-${i}-button`).style.cursor = "default"
+            }
+    
+            rowButton = document.getElementById(`row-${row}-button`)
+            rowButton.onclick = buttonOnClick
+            rowButton.style.cursor = "pointer"
+            rowButton.style.opacity = "100%"
+        }
+    
+        gridItem.onkeydown = async function(e) {
+            if (e.key == "Control" || e.key == " " || e.key == "Option" || e.key == "Alt") {
+                e.preventDefault();
+            }
+        }
+    
+        gridItem.onkeyup = async function(e) {
+            doTimer()
+            id = parseInt(e.target.id.replace("-input", ""))
+            elem = document.getElementById(id)
+            input = document.getElementById(`${i}-input`)
+    
+            row = Math.floor(id/5)
+            rowCounter = 0
+            for (i of Array(5 * 6).keys()) {
+                if (input.value != "") rowCounter += 1;
+            } 
+            
+            enableRow(row=row+1)
+    
+            if (e.key == "Backspace") {
+                document.getElementById(`${id-1}-input`).focus()
+            } else if (e.key == "ArrowLeft") {
+                document.getElementById(`${id-1}-input`).focus()
+            } else if (e.key == "ArrowRight") {
+                document.getElementById(`${id+1}-input`).focus()
+            }
+            else if (e.key == "Control" || e.key == " " || e.key == "Option" || e.key == "Alt") {
+                onContextMenu(e)
+            } else if (letters.includes(e.key.toLowerCase())) {
+                addLocal("letters", 1)
+                document.getElementById(`${id+1}-input`).focus()
+            } else {
+                return
+            }
+        }
 
-        gridButton = document.createElement("div")
-        gridButton.id = `row-${row}-button`
-        gridButton.innerHTML = `<div id="row-${row}-button" style="margin-top:22px">Auto Fill</div>`
-        gridButton.style.opacity = "0%"
-        gridButton.classList = "grid-button"
-        gridButton.style.backgroundColor = colors[2]
-        gridButton.style.cursor = "default"
+        if (row > 0) {
+            // Under top row 
+            inputField.disabled = true
+            gridItem.classList = "grid-item disabled"
+        } else {
+            // Top row
+            gridItem.style.backgroundColor = colors[0]
+            gridItem.classList = "grid-item"
+    
+            gridItem.oncontextmenu = onContextMenu
+        }
 
-        grid.appendChild(gridButton)
+        gridItem.appendChild(inputField)
+        grid.appendChild(gridItem)
+    
+        if ((i-4) % 5 == 0) {
+            row = Math.floor(i/5)
+    
+            gridButton = document.createElement("div")
+            gridButton.id = `row-${row}-button`
+            gridButton.innerHTML = `<div id="row-${row}-button" style="margin-top:22px">Auto Fill</div>`
+            gridButton.style.opacity = "0%"
+            gridButton.classList = "grid-button"
+            gridButton.style.backgroundColor = colors[2]
+            gridButton.style.cursor = "default"
+    
+            grid.appendChild(gridButton)
+        }
+    
+        words.push({
+            grid:grid,
+            input:inputField,
+            item:gridItem,
+            state: 0,
+            wordIndex: i % 5
+        })
     }
 
-    words.push({
-        grid:grid,
-        input:inputField,
-        item:gridItem,
-        state: 0,
-        wordIndex: i % 5
-    })
+    document.getElementById("0-input").focus()
 }
 
-document.getElementById("0-input").focus()
+init()
+
+
+
 
 
 if (OSName == "Mobile") {
@@ -349,7 +335,8 @@ function addLocal(key, amount) {
     statsCache.local = JSON.stringify(lc)
 }
 
-function individualLettersPopUp() {
+function individualLettersPopUp(e) {
+    e.preventDefault()
     
     if (statsOuter.style.opacity != 1) {
         statsOuter.style.opacity = "100%"
@@ -383,8 +370,22 @@ async function getStats() {
 
 }
 
+async function reload() {
+    grid.innerHTML = ``
+    message.innerHTML = ``
+    words = []
+    init()
+    await post("/api/addGame", {})
+}
+
 async function end() {
-    window.location.reload()
+    //window.location.reload()
+    clearTimeout(reloadTimer);
+    // Sets new timer that may or may not get cleared
+    reloadTimer = setTimeout(async () => {
+        await reload()
+    }, 500);
+    
 }
 
 async function startForMe(row=0) {

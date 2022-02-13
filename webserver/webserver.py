@@ -23,6 +23,11 @@ def stats():
         wordle.stats.to_dict()
     )
 
+@app.route("/api/addGame", methods=["POST"])
+def addGame():
+    wordle.stats.games += 1
+    return {"stats":wordle.stats.to_dict()}
+
 @app.route("/api/autoFillRow", methods=["POST"])
 def autoFillRow():
     data = flask.request.json 
